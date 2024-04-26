@@ -20,15 +20,14 @@ class Model():
     def __init__(self, initial_concentration, time_duration, source, mass_coeffs, areas, volume):
         """
         Args:
-            time_i (float): initial time, typically 0
-            time_f (float): final time
-            source (function/method): neutron source and scheduling function
+            initial_concentration (float): initial concnetration of tritium, typically 0. [] = count/s
+            time_duration (float): How long the experiment lasts [] = seconds
+            source (int): neutron source [] = count/s
             mass_coeffs (float list): list of mass transfer coefficients, currently in the following format:
-                [k_top, k_wall]
+                [k_top, k_wall] [] = m/s
             areas (float list): list of geometric areas, currently in the following format:
-                [a_top, a_wall]
-            volume (float): volume of reactor
-        
+                [a_top, a_wall] [] = m^2
+            volume (float): volume of reactor [] = m^3
         """
         self._initial_concentration = initial_concentration
         self._time_duration = time_duration
@@ -55,6 +54,13 @@ class Model():
     ############ model-specific methods ############
 
     def source_func(self, current_time): # GOOD
+        """
+        Args: 
+            current_time: point in time used to determine whether neutron source is on or not
+
+        Returns:
+            0 or 1: Integer multiplied by source, 0 for off and 1 for on
+        """
         seconds_per_hour = 3600
         half_day = 12*seconds_per_hour
         full_day = 24*seconds_per_hour
@@ -141,7 +147,7 @@ if __name__ == '__main__':
     volume = 0.000100 
 
     model = Model(initial_concentration, experiment_duration, source, mass_transfer_coeffs, areas, volume)
-    raw_data = np.array([[20, 0, 0, 0],
+    raw_data = np.array([[0, 0, 0, 0],
                          [0, 0, 0, 0],
                          [0, 0, 0, 0],
                          [0, 0, 0, 0],
